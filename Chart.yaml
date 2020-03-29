@@ -1,0 +1,6 @@
+apiVersion: v2
+name: brainfuck.helm
+description: A brainfuck interpreter in Helm Template Language
+type: application
+version: 0.1.0
+appVersion: 1.16.0
