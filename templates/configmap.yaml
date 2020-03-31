@@ -4,5 +4,5 @@ metadata:
     name: brainfuck
 data:
     stdout:
-      {{- $env := dict "program" .Values.program "input" .Values.stdin }} 
+      {{- $env := dict "program" .Values.program "input" .Values.stdin "wrap" .Values.wrap }} 
       {{- include "bf.run" $env | toYaml}}

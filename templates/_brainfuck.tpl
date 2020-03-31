@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{- define "bf.run" -}}
-{{-   $env := dict "s" (splitList "" $.program) "i" $.input "ii" 0 -}}
+{{-   $env := dict "s" (splitList "" $.program) "i" $.input "ii" 0 "w" $.wrap -}}
 {{-   $_ := set $env "ma" (default 1000000 (get $ "maxActions")) -}}
 {{-   $_ := set $env "el" (default 100 (get $ "everyLoop")) -}}
 {{-   template "bf._init" $env -}}
@@ -74,7 +74,8 @@ the helm has 100000 maximum template depth
 {{- define "bf._token_+" -}}
 {{-   $p := toString $.p -}}
 {{-   if hasKey $.m $p -}}
-{{-     $_ := get $.m $p | add1 | set $.m $p -}}
+{{-     $v := get $.m $p | add1 -}}
+{{-     $_ := not $.w | ternary $v (mod $v 256) | set $.m $p -}}
 {{-   else -}}
 {{-     $_ := set $.m $p 1 -}}
 {{-   end -}}
@@ -83,7 +84,8 @@ the helm has 100000 maximum template depth
 {{- define "bf._token_-" -}}
 {{-   $p := toString $.p -}}
 {{-   if hasKey $.m $p -}}
-{{-     $_ := sub (get $.m $p) 1 | set $.m $p -}}
+{{-     $v := sub (get $.m $p) 1 -}}
+{{-     $_ := not $.w | ternary $v (mod $v 256) | set $.m $p -}}
 {{-   else -}}
 {{-     $_ := set $.m $p -1 -}}
 {{-   end -}}
