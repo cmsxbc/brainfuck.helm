@@ -13,9 +13,9 @@
 {{-   $_ := set $ "m" dict -}}
 {{-   $_ := set $ "p" 0 -}}
 {{-   $_ := set $ "b" list -}}
-{{-   $_ := set $ "sp" 0 -}}
-{{-   $_ := set $ "l" (int64 (len $.s)) -}}
-{{-   $_ := set $ "il" (int64 (len $.i)) -}}
+{{-   $_ := set $ "sp" (int 0) -}}
+{{-   $_ := set $ "l" (int (len $.s)) -}}
+{{-   $_ := set $ "il" (int (len $.i)) -}}
 {{-   $_ := set $ "mcs" (list "<" ">" "[" "]" "+" "-" "." ",") -}}
 {{-   $_ := set $ "ac" 0 -}}
 {{- end -}}
@@ -54,27 +54,13 @@ the helm has 100000 maximum template depth
 {{- end -}}
 
 {{- define "bf._action" -}}
-{{-   if hasKey $ "_skip2]" -}}
-{{-     if get $ "_skip2]" -}}
-{{-       include "bf._skip2]" $ -}}
-{{-     end -}}
-{{-   end -}}
 {{-   if (gt ($.l) ($.sp)) -}}
 {{-     if has (index $.s $.sp) $.mcs -}}
 {{-       $name := printf "bf._token_%s" (index $.s $.sp) -}}
 {{-       include $name $ -}}
 {{-     end -}}
 {{-   end -}}
-{{-   $_ := add 1 $.sp | set $ "sp" -}}
-{{- end -}}
-
-{{- define "bf._skip2]" -}}
-{{-   if ne (index $.s $.sp) "]" -}}
-{{-     $_ := add 1 $.sp | set $ "sp" -}}
-{{-     include "bf._skip2]" $ -}}
-{{-   else -}}
-{{-     $_ := unset $ "_skip2]" -}}
-{{-   end -}}
+{{-   $_ := add1 $.sp | set $ "sp" -}}
 {{- end -}}
 
 {{- define "bf._token_>" -}}
@@ -124,7 +110,19 @@ the helm has 100000 maximum template depth
 {{- define "bf._token_[" -}}
 {{-   $p := toString $.p -}}
 {{-   if eq (default 0 (get $.m $p)) 0 -}}
-{{-     $_ := set $ "_skip2]" true -}}
+{{-     $_ := set $ "__token_[_tmp" 1 -}}
+{{-     range $i := untilStep (int $.sp) $.l 1 -}}
+{{-       if get $ "__token_[_tmp" -}}
+{{-         $_ := add1 $.sp | set $ "sp" -}}
+{{-         $_cur := index $.s $.sp -}} 
+{{-         if eq $_cur "[" -}}
+{{-           $_ := get $ "__token_[_tmp" | add1 | set $ "__token_[_tmp" -}} 
+{{-         else if eq $_cur "]" -}}
+{{-           $_ := sub (get $ "__token_[_tmp") 1 | set $ "__token_[_tmp" -}} 
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     $_ := unset $ "__token_[_tmp" -}}
 {{-   else -}}
 {{-     $_ := prepend $.b $.sp | set $ "b" -}}
 {{-   end -}}

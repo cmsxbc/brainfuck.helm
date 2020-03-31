@@ -13,7 +13,7 @@ helm template .
 ```
 
 # TODO
-[ ] bug fix, run all example from esolang correctly.
+[] bug fix, run all example from esolang correctly.
 
 
 
