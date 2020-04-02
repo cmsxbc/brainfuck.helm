@@ -1,7 +1,7 @@
 # Brainfuck.helm
 A brainfuck interpreter implemented by Helm Template Language.
 
-Only run correctly with first example from [eso-brainfuck](https://esolangs.org/wiki/Brainfuck)
+Run all "hello world" example from [eso-brainfuck](https://esolangs.org/wiki/Brainfuck) with cell size wrap option
 
 # requirement
 Helm >= 3.1.2
@@ -13,7 +13,7 @@ helm template .
 ```
 
 # TODO
-[] bug fix, run all example from esolang correctly.
+[x] bug fix, run all example from esolang correctly.
 
 
 

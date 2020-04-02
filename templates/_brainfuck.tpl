@@ -85,7 +85,7 @@ the helm has 100000 maximum template depth
 {{-   $p := toString $.p -}}
 {{-   if hasKey $.m $p -}}
 {{-     $v := sub (get $.m $p) 1 -}}
-{{-     $_ := not $.w | ternary $v (mod $v 256) | set $.m $p -}}
+{{-     $_ := not $.w | ternary $v (mod (add $v 256) 256) | set $.m $p -}}
 {{-   else -}}
 {{-     $_ := set $.m $p -1 -}}
 {{-   end -}}
