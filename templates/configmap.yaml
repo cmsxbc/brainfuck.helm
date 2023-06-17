@@ -1,8 +1,17 @@
+{{ range  $i, $e := .Values.brainfucks -}}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: brainfuck
+    name: brainfuck-{{ $i }}
 data:
-    stdout:
-      {{- $env := dict "program" .Values.program "input" .Values.stdin "wrap" .Values.wrap }} 
-      {{- include "bf.run" $env | toYaml}}
+  program:
+      {{- $e.program | toYaml }}
+  input:
+      {{- $e.stdin | toYaml }}
+  wrap:
+      {{- $e.wrap | toYaml }}
+  output:
+      {{- $env := dict "program" $e.program "input" (default ""  $e.stdin) "wrap" (default true $e.wrap) }}
+      {{- include "bf.run" $env | toYaml }}
+{{ end }}
